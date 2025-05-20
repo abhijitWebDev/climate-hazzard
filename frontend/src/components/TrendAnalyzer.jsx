@@ -184,7 +184,7 @@ const TrendAnalyzer = () => {
               Export CSV
             </button>
             <button
-              onClick={() => window.open(`http://localhost:8000/export/pdf?lat=${getLatLonCenter().lat}&lon=${getLatLonCenter().lon}`, '_blank')}
+              onClick={() => window.open(`${API_BASE}/export/pdf?lat=${getLatLonCenter().lat}&lon=${getLatLonCenter().lon}`, '_blank')}
               className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded-lg"
             >
               Export PDF
