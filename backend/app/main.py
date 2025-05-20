@@ -7,7 +7,7 @@ app = FastAPI(title="Climate Hazard Trend Analyzer")
 # Add CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Or specify allowed origins
+    allow_origins=["http://localhost:5173", "https://climate-hazzard.vercel.app/"],  # Or specify allowed origins
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
