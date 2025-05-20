@@ -25,6 +25,11 @@ def fix_objectid(doc):
 
 @router.post("/ingest")
 async def ingest_data(lat: float, lon: float, start: str, end: str):
+    # Defensive validation for coordinates
+    if lon < -180 or lon > 180:
+        return {"error": "Longitude must be between -180 and 180."}
+    if lat < -90 or lat > 90:
+        return {"error": "Latitude must be between -90 and 90."}
     weather_df = fetch_weather_data(lat, lon, start, end)
     heatwaves = detect_heatwaves(weather_df)
 
@@ -70,12 +75,12 @@ async def get_trend(
         "lon": lon,
         "type": hazard_type,
         "start": {
-            "$gte": datetime(start_year, 1, 1),
-            "$lte": datetime(end_year, 12, 31)
-        }
+        "$gte": f"{start_year}-01-01",
+        "$lte": f"{end_year}-12-31"
+}
     }))
     for e in events:
-        e["start"] = e["start"].isoformat()
+        e["start"] = str(e["start"])
     trend = analyze_heatwave_trend(events)
     return trend
 
@@ -87,12 +92,12 @@ async def trend_plot(lat: float, lon: float, start_year: int = 1990, end_year: i
         "lon": lon,
         "type": hazard_type,
         "start": {
-            "$gte": datetime(start_year, 1, 1),
-            "$lte": datetime(end_year, 12, 31)
+            "$gte": f"{start_year}-01-01",
+            "$lte": f"{end_year}-12-31"
         }
     }))
     for e in events:
-        e["start"] = e["start"].isoformat()
+        e["start"] = str(e["start"])
     trend = analyze_heatwave_trend(events)
     if not trend or "trend_chart_base64" not in trend:
         return Response(status_code=404)

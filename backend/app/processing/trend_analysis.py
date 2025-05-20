@@ -29,7 +29,13 @@ def analyze_heatwave_trend(events):
         return {"error": "No events found."}
 
     df = pd.DataFrame(events)
-    df["year"] = pd.to_datetime(df["start"]).dt.year
+    print("Trend DataFrame before date parsing:", df.head())  # Debug print
+    try:
+        df["year"] = pd.to_datetime(df["start"], format="%Y-%m-%d %H:%M:%S", errors="coerce").dt.year
+    except Exception as e:
+        print("Date parsing error:", e)
+        df["year"] = pd.to_datetime(df["start"], errors="coerce").dt.year
+    print("Trend DataFrame after date parsing:", df.head())  # Debug print
 
     yearly_counts = df.groupby("year").size().reset_index(name="count")
 
