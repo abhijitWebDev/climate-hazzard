@@ -5,6 +5,8 @@ import axios from 'axios';
 import 'leaflet/dist/leaflet.css';
 import { Chart, LineElement, PointElement, LinearScale, Title, CategoryScale } from 'chart.js';
 
+const API_BASE = import.meta.env.VITE_API_URL || '';
+
 Chart.register(LineElement, PointElement, LinearScale, Title, CategoryScale);
 
 const DEFAULT_BOUNDS = [
@@ -52,7 +54,7 @@ const TrendAnalyzer = () => {
 
     try {
       setLoading(true);
-      const res = await axios.get('http://localhost:8000/trends', {
+      const res = await axios.get(`${API_BASE}/trends`, {
         params: {
           lat: center.lat,
           lon: center.lon,
@@ -176,7 +178,7 @@ const TrendAnalyzer = () => {
 
           <div className="flex justify-center gap-4 mt-6">
             <button
-              onClick={() => window.open(`http://localhost:8000/export/csv?lat=${getLatLonCenter().lat}&lon=${getLatLonCenter().lon}`, '_blank')}
+              onClick={() => window.open(`${API_BASE}/export/csv?lat=${getLatLonCenter().lat}&lon=${getLatLonCenter().lon}`, '_blank')}
               className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg"
             >
               Export CSV
